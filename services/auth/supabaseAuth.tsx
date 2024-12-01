@@ -1,3 +1,4 @@
+import { AuthResponse } from "@supabase/supabase-js";
 import { supabase } from "./supabaseClient";
 
 type loginCredentials = {
@@ -6,10 +7,11 @@ type loginCredentials = {
 };
 
 export const login = async ({ email, password }: loginCredentials) => {
-	const { data, error } = supabase.auth.signInWithPassword({
-		email,
-		password,
-	});
+	const { data, error }: AuthResponse =
+		await supabase.auth.signInWithPassword({
+			email,
+			password,
+		});
 
 	if (error) {
 		console.log("Login Error: ", error);
@@ -20,7 +22,7 @@ export const login = async ({ email, password }: loginCredentials) => {
 };
 
 export const logout = async () => {
-	const { error } = supabase.auth.signOut();
+	const { error } = await supabase.auth.signOut();
 
 	if (error) {
 		console.log("Logout Error: ", error);
