@@ -1,4 +1,4 @@
-import { AuthResponse } from "@supabase/supabase-js";
+import { ACTIVE } from "@/constants/status";
 import { supabase } from "./supabaseClient";
 
 type loginCredentials = {
@@ -12,15 +12,15 @@ type registerCredentials = {
 	first_name: string;
 	last_name: string;
 	status?: string;
-	contact_number: number;
+	user_type?: string;
+	contact_number: string;
 };
 
 export const login = async ({ email, password }: loginCredentials) => {
-	const { data, error }: AuthResponse =
-		await supabase.auth.signInWithPassword({
-			email,
-			password,
-		});
+	const { data, error } = await supabase.auth.signInWithPassword({
+		email,
+		password,
+	});
 
 	if (error) {
 		console.log("Login Error: ", error);
@@ -54,6 +54,7 @@ export const register = async ({
 		first_name: first_name,
 		last_name: last_name,
 		status: ACTIVE,
+		user_type: 'admin',
 		contact_number: contact_number,
 	};
 
@@ -66,7 +67,9 @@ export const register = async ({
 		throw insertError;
 	}
 
-	return {insertData, data};
+	console.log('success')
+
+	return { insertData, data };
 };
 
 export const logout = async () => {
