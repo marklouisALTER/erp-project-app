@@ -50,7 +50,6 @@ export const register = async ({
 	const insertData = {
 		user_id: data.user?.id,
 		email: email,
-		password: password,
 		first_name: first_name,
 		last_name: last_name,
 		status: ACTIVE,
