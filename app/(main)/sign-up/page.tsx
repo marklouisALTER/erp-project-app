@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button"
 
 export default function SignUp() {
 	const [formData, setFormData] = useState({
-		email: 'cheschesj@gmail.com',
-		password: 'testtest',
-		first_name: 'chester',
-		last_name: 'test',
-		contact_number: '09123123123123',
+		email: '',
+		password: '',
+		first_name: '',
+		last_name: '',
+		contact_number: '',
 	})
 
 	const handleRegister = (e: any) => {
@@ -22,6 +22,12 @@ export default function SignUp() {
 			console.log(error)
 	  }
 	}
+
+  const handleChange = (e) => {
+    const { name, value } e.target;
+    setFormData({...formData, [name] : value})
+  }
+
     return(
         <div>
 			<Button onClick={(e) => {handleRegister(e)}}>Click me!</Button>

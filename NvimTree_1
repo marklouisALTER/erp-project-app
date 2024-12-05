@@ -1,0 +1,27 @@
+  .git
+  ✗ app
+    ✗ (main)
+  │   [...not-found]
+  │   sign-in
+  │   ✗ sign-up
+  │ │ └  ✗ page.tsx
+  │ │  layout.tsx
+  │ │  not-found.tsx
+  │ └  page.tsx
+  └  globals.css
+  components
+  constants
+  hooks
+  lib
+  public
+  services
+   .eslintrc.json
+   .gitignore
+   components.json
+  󰛦 next.config.ts
+   package-lock.json
+   package.json
+   postcss.config.mjs
+   README.md
+  󱏿 tailwind.config.ts
+   tsconfig.json
