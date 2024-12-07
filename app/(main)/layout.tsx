@@ -1,5 +1,8 @@
 import type { Metadata } from "next"
 import "../globals.css";
+import { Karla } from "next/font/google";
+
+const karla = Karla({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
     title: "Erp System Management App",
@@ -9,7 +12,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly <{children: React.ReactNode}>){
     return (
         <html lang="en">
-            <body>
+            <body className={karla.className}>
                 {/* We will put here the components for auth such as login and sign up */}
                {children}
             </body>
