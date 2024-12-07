@@ -9,7 +9,7 @@ type submitType = {
     remember: boolean;
 };
 
-export default function SignIn() {
+export default function Login() {
 
     const { isDark } = useTheme();
    
