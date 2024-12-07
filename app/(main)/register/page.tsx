@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { WavyElement } from "@/components/elements/wavy";
+import { useState } from "react";
 
 const formScema = z.object({
 	email: z.string().email("Invalid email address"),
@@ -26,6 +27,8 @@ const formScema = z.object({
 });
 
 export default function Register() {
+	const [loading, setLoading] = useState(false);
+
 	const form = useForm<z.infer<typeof formScema>>({
 		resolver: zodResolver(formScema),
 		defaultValues: {
@@ -38,10 +41,17 @@ export default function Register() {
 	});
 
 	const onSubmit = (values: z.infer<typeof formScema>) => {
-		console.log("submitted");
-		console.log(values);
+		setLoading(true);
 
-		//register()
+		try {
+			console.log("submitted");
+			register(values);
+			setLoading(false);
+			//TODO: redirect to login route
+		} catch (error) {
+			console.log(error);
+			setLoading(false);
+		}
 	};
 
 	return (
@@ -135,7 +145,13 @@ export default function Register() {
 								)}
 							></FormField>
 							<div className="text-center py-5">
-								<Button type="submit">Submit</Button>
+								{!loading ? (
+									<Button type="submit">Submit</Button>
+								) : (
+									<Button className="animate-spin">
+										Loading...
+									</Button>
+								)}
 							</div>
 						</form>
 					</Form>
