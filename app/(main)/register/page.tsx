@@ -17,10 +17,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { WavyElement } from "@/components/elements/wavy";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { ToastContainer, toast } from "react-toastify";
 
 const formScema = z.object({
 	email: z.string().email("Invalid email address"),
-	password: z.string(),
+	password: z.string().min(6, "Password should be atleast 6 characters"),
 	first_name: z.string(),
 	last_name: z.string(),
 	contact_number: z.string().min(11, "Invalid phone number."),
@@ -40,15 +42,16 @@ export default function Register() {
 		},
 	});
 
-	const onSubmit = (values: z.infer<typeof formScema>) => {
+	const onSubmit = async (values: z.infer<typeof formScema>) => {
 		setLoading(true);
 
 		try {
-			console.log("submitted");
-			register(values);
+			const response = await register(values);
+			toast.success('Registration successful!')
 			setLoading(false);
 			//TODO: redirect to login route
 		} catch (error) {
+			toast.error('Something went wrong.')
 			console.log(error);
 			setLoading(false);
 		}
@@ -56,11 +59,20 @@ export default function Register() {
 
 	return (
 		<section className="relative w-full h-screen flex items-center justify-center px-5 antialiased">
+			<ToastContainer
+				position="top-right"
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={true}
+				closeOnClick
+				rtl={false}
+				pauseOnHover
+			/>
 			<div className="w-[40rem] h-[35rem] z-[99] rounded-xl bg-white shadow-2xl shadow-gray-800/40 border-2 border-gray-200 p-5">
 				<div className="items-center justify-center text-center">
 					<h1>Logo here</h1>
 				</div>
-				<div className="flex-col p-4">
+				<div className="flex-col p-4 justify-center items-center">
 					<Form {...form}>
 						<form onSubmit={form.handleSubmit(onSubmit)}>
 							<FormField
@@ -148,7 +160,7 @@ export default function Register() {
 								{!loading ? (
 									<Button type="submit">Submit</Button>
 								) : (
-									<Button className="animate-spin">
+									<Button className={cn("animate-spin")}>
 										Loading...
 									</Button>
 								)}
