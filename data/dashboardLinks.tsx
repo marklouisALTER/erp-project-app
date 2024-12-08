@@ -1,4 +1,6 @@
 import { MdSpaceDashboard } from "react-icons/md";
+import { IoSettings } from "react-icons/io5";
+import { FaBoxes } from "react-icons/fa";
 
 export type SidebarLink = {
     key: string;
@@ -23,7 +25,7 @@ export const dashboardLinks: SidebarLink[] = [
     {
         key: "inventory",
         label: "Inventory",
-        icon: <MdSpaceDashboard />,
+        icon: <FaBoxes />,
         subLinks: [
             {
                 key: "products",
@@ -40,7 +42,13 @@ export const dashboardLinks: SidebarLink[] = [
     {
         key: "account-settings",
         label: "Account Settings",
-        icon: <MdSpaceDashboard />,
-        path: "/dashboard/account-settings",
+        icon: <IoSettings />,
+        subLinks: [
+            {
+                key: "change-theme",
+                label: "Change Theme",
+                path: "/account-settings/change-theme",
+            },
+        ],
     }
 ];

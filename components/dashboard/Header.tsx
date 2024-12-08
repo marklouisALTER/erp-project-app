@@ -7,9 +7,8 @@ export default function Header() {
     const { isOpen, toggleSidebar } = useSidebarStore();
 
     return (
-        <header className="bg-custom-gray fixed w-full lg:w-[calc(100%-265px)] lg:ml-[265px] z-20">
+        <header className="bg-custom- fixed w-full lg:w-[calc(100%-265px)] lg:ml-[265px] z-20">
             <div className="flex justify-between items-center h-16 px-4">
-                <h1 className="text-2xl font-bold text-custom-orange">ERP</h1>
 
                 {/* Sidebar Toggle Button for Small Screens */}
                 <button

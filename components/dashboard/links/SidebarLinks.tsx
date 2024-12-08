@@ -14,8 +14,8 @@ export function SidebarLinks({ item }: { item: SidebarLink }) {
     <>
       {/* Main link */}
       <li
-        className={`flex items-center mb-4 w-52 justify-between cursor-pointer rounded-md px-3 py-3 duration-300 ${
-          isActive ? 'bg-custom-orange text-white' : isOpen ? 'bg-custom-orange text-white' : 'text-custom-orange hover:text-white hover:bg-custom-orange'
+        className={`flex items-center mb-4 w-56 justify-between cursor-pointer rounded-md px-3 py-3 duration-300 ${
+          isActive ? 'bg-custom-orange text-white' : 'text-custom-orange/60 hover:text-white hover:bg-custom-orange'
         }`}
         onClick={() => setIsOpen(!isOpen)}
       >
@@ -42,15 +42,15 @@ export function SidebarLinks({ item }: { item: SidebarLink }) {
       {item.subLinks && (
         <ul
           className={`overflow-hidden transition-all duration-300 ${
-            isOpen ? 'max-h-40' : 'max-h-0'
+            isOpen ? 'max-h-32' : 'max-h-0'
           }`}
         >
           {item.subLinks.map((subLink) => (
             <li
               key={subLink.key}
-              className={`flex items-center gap-2 py-2 px-4 text-sm text-custom-orange hover:text-white hover:bg-custom-orange rounded-md`}
+              className={`flex items-center gap-2 text-sm transition-all ease-in-out text-custom-orange/60 hover:text-white hover:bg-custom-orange rounded-md`}
             >
-              <Link href={subLink.path} className="flex items-center gap-2">
+              <Link href={subLink.path} className="flex items-center gap-2 px-3 py-2">
                 {subLink.icon && <span className="text-lg">{subLink.icon}</span>}
                 <span>{subLink.label}</span>
               </Link>
