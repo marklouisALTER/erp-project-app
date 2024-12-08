@@ -1,17 +1,34 @@
 import type { Metadata } from "next";
+import "../globals.css";
+import { Karla } from "next/font/google";
+import Sidebar from "@/components/dashboard/Sidebar";
+import { Suspense } from "react";
+import Loader from "@/components/Common/Loader";
+import Header from "@/components/dashboard/Header";
 
+
+const karla = Karla({ subsets: ["latin"] });
 export const metadata: Metadata = {
     title: "Erp System Management App | Dashboard",
     description: "Erp System Management App is a web application that helps you manage your business",
 }
 
-export default function DashboardLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <html lang="en">
-            <body>
-                {/* We will put here the components for auth such as login and sign up */}
-                {children}
-            </body>
-        </html>
+    <html lang="en">
+        <body className={karla.className}>
+            <section className="w-full h-screen">
+                <Sidebar />
+                <div className="flex flex-col h-screen">
+                    {/* Header */}
+                    <Header />
+                    {/* Main Content */}
+                    <main className="mt-16 min-h-[calc(100vh-4rem)] bg-custom-gray lg:ml-[265px]">
+                        <Suspense fallback={<Loader />}>{children}</Suspense>
+                    </main>
+                </div>
+            </section>
+        </body>
+    </html>
     )
 }

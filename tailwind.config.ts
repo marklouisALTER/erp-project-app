@@ -8,7 +8,12 @@ export default {
 		"./app/**/*.{js,ts,jsx,tsx,mdx}",
 	],
 	theme: {
-		extend: {},
+		extend: {
+			colors: {
+				"custom-orange": "#f54714",
+				"custom-black": "#1c1c1c"
+			}
+		},
 	},
 	plugins: [require("tailwindcss-animate")],
 } satisfies Config;
