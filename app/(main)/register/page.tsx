@@ -14,11 +14,10 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { WavyElement } from "@/components/elements/wavy";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
 import { ToastContainer, toast } from "react-toastify";
+import { Button } from "antd";
 
 const formScema = z.object({
 	email: z.string().email("Invalid email address"),
@@ -156,15 +155,14 @@ export default function Register() {
 									</FormItem>
 								)}
 							></FormField>
-							<div className="text-center py-5">
-								{!loading ? (
-									<Button type="submit">Submit</Button>
-								) : (
-									<Button className={cn("animate-spin")}>
-										Loading...
-									</Button>
-								)}
-							</div>
+							<Button
+								type="primary"
+								loading={loading}
+								htmlType="submit"
+								className="w-full mt-5"
+							>
+								Register
+							</Button>
 						</form>
 					</Form>
 				</div>
