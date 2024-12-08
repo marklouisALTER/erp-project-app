@@ -1,0 +1,21 @@
+  .git
+  app
+  components
+  constants
+  data
+  hooks
+  lib
+  public
+  ✗ services
+  store
+  󰈚 .env.example
+   .eslintrc.json
+   .gitignore
+   components.json
+  󰛦 next.config.ts
+   package-lock.json
+   package.json
+   postcss.config.mjs
+   README.md
+  󱏿 tailwind.config.ts
+   tsconfig.json

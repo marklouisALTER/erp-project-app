@@ -87,6 +87,7 @@ export const getUser = async () => {
 
 	if (error) {
 		console.log("Error getting user details: ", error);
+    throw error;
 	}
 
 	return data.user;
@@ -97,6 +98,7 @@ export const getSession = async () => {
 
 	if (error) {
 		console.log("Error getting user session: ", error);
+    throw error;
 	}
 
 	return data.session;
