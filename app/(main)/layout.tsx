@@ -15,8 +15,8 @@ export default function RootLayout({ children }: Readonly <{children: React.Reac
     return (
         <html lang="en">
             <body className={karla.className}>
-                {/* We will put here the components for auth such as login and sign up */}
-               {children}
+				{/* We will put here the components for auth such as login and sign up */}
+				{children}
             </body>
         </html>
     )
