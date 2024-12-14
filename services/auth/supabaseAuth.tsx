@@ -27,7 +27,16 @@ export const login = async ({ email, password }: loginCredentials) => {
 		throw error;
 	}
 
-	return data;
+	const accessToken = data.session.access_token;
+	const refreshToken = data.session.refresh_token;
+	const userId = data.user.id;
+	const accountData = await getAccount(userId);
+
+	return {
+		accessToken: accessToken,
+		refreshToken: refreshToken,
+		accountData: accountData,
+	};
 };
 
 export const register = async ({
@@ -53,9 +62,11 @@ export const register = async ({
 		first_name: first_name,
 		last_name: last_name,
 		status: ACTIVE,
-		user_type: 'admin',
+		user_type: "admin",
 		contact_number: contact_number,
 	};
+
+	console.log("inserted data", insertData);
 
 	const { data: insertValues, error: insertError } = await supabase
 		.from("account")
@@ -66,7 +77,7 @@ export const register = async ({
 		throw insertError;
 	}
 
-	console.log('success')
+	console.log("success");
 
 	return { insertData, data };
 };
@@ -101,3 +112,31 @@ export const getSession = async () => {
 
 	return data.session;
 };
+
+export const getAccount = async (userId: string) => {
+	const { data, error } = await supabase
+		.from("account")
+		.select("*")
+		.eq("user_id", userId);
+
+	if (error) {
+		console.log("Error fetching account data", error);
+	}
+
+	const accountData = data;
+
+	return data?.[0] ?? null;
+};
+
+export const rememberMe = (data: any) => {
+	localStorage.setItem("account", JSON.parse(data))
+};
+
+export const storeSessionStorage = (data: any) => {
+	sessionStorage.setItem("account", JSON.stringify(data));
+};
+
+export const clearStorage = (storage?: string) => {
+	storage === 'local' ? localStorage.clear() : sessionStorage.clear();
+};
+
