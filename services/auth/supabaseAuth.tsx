@@ -108,10 +108,17 @@ export const getSession = async () => {
 
 	if (error) {
 		console.log("Error getting user session: ", error);
+		return null;
 	}
 
 	return data.session;
 };
+
+export const getToken = async () => {
+	const session = await getSession();
+
+	return session?.access_token ?? null
+}
 
 export const getAccount = async (userId: string) => {
 	const { data, error } = await supabase
@@ -129,11 +136,16 @@ export const getAccount = async (userId: string) => {
 };
 
 export const rememberMe = (data: any) => {
-	localStorage.setItem("account", JSON.parse(data))
+	localStorage.setItem("account", JSON.stringify(data.accountData));
+	localStorage.setItem("accessToken", JSON.stringify(data.accessToken));
+	localStorage.setItem("refreshToken", JSON.stringify(data.refreshToken));
+
 };
 
 export const storeSessionStorage = (data: any) => {
-	sessionStorage.setItem("account", JSON.stringify(data));
+	sessionStorage.setItem("account", JSON.stringify(data.accountData));
+	sessionStorage.setItem("accessToken", data.accessToken);
+	sessionStorage.setItem("refreshToken", data.refreshToken);
 };
 
 export const clearStorage = (storage?: string) => {

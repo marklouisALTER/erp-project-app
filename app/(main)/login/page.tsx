@@ -14,6 +14,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
 import { loginSchema } from "@/schema";
 import {
+	getSession,
 	login,
 	rememberMe,
 	storeSessionStorage,
@@ -21,11 +22,12 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Checkbox } from "antd";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { z } from "zod";
 import { Button } from "antd";
+import { isAuthenticated } from "@/lib/auth/getToken";
 
 export default function Login() {
 	const router = useRouter();
@@ -33,6 +35,10 @@ export default function Login() {
 
 	const [loading, setLoading] = useState(false);
 	const [isChecked, setIsChecked] = useState(false);
+
+	useEffect(() => {
+		!isAuthenticated() ? null : router.push("/dashboard");
+	});
 
 	const form = useForm<z.infer<typeof loginSchema>>({
 		resolver: zodResolver(loginSchema),
@@ -48,11 +54,11 @@ export default function Login() {
 		try {
 			const response = await login(values);
 
-			// if (!isChecked) {
-			// 	storeSessionStorage(response.accountData);
-			// } else {
-			// 	rememberMe(response.accountData);
-			// }
+			if (!isChecked) {
+				storeSessionStorage(response);
+			} else {
+				rememberMe(response);
+			}
 
 			toast.success("Login Successs!");
 			router.push("/dashboard");
@@ -63,7 +69,7 @@ export default function Login() {
 		}
 	};
 
-	const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleCheck = (e) => {
 		setIsChecked(e.target.checked);
 	};
 
