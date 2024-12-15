@@ -118,7 +118,7 @@ export const getToken = async () => {
 	const session = await getSession();
 
 	return {
-		acessToken: session?.access_token ?? null,
+		accessToken: session?.access_token ?? null,
 		refreshToken: session?.refresh_token ?? null,
 	};
 };

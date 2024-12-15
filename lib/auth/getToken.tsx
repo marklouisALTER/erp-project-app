@@ -1,10 +1,10 @@
-import { getSession } from "@/services/auth/supabaseAuth";
+import { getSession, getToken } from "@/services/auth/supabaseAuth";
 
 export const isAuthenticated = async () => {
-	const session = await getSession();
+	const { accessToken } = await getToken();
 
 	return (
-		session?.access_token === sessionStorage.getItem("accessToken") ||
-		session?.access_token === localStorage.getItem("accessToken")
+		accessToken === sessionStorage.getItem("accessToken") ||
+		accessToken === localStorage.getItem("accessToken")
 	);
 };
