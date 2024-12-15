@@ -117,8 +117,11 @@ export const getSession = async () => {
 export const getToken = async () => {
 	const session = await getSession();
 
-	return session?.access_token ?? null
-}
+	return {
+		acessToken: session?.access_token ?? null,
+		refreshToken: session?.refresh_token ?? null,
+	};
+};
 
 export const getAccount = async (userId: string) => {
 	const { data, error } = await supabase
@@ -139,7 +142,6 @@ export const rememberMe = (data: any) => {
 	localStorage.setItem("account", JSON.stringify(data.accountData));
 	localStorage.setItem("accessToken", JSON.stringify(data.accessToken));
 	localStorage.setItem("refreshToken", JSON.stringify(data.refreshToken));
-
 };
 
 export const storeSessionStorage = (data: any) => {
@@ -149,6 +151,5 @@ export const storeSessionStorage = (data: any) => {
 };
 
 export const clearStorage = (storage?: string) => {
-	storage === 'local' ? localStorage.clear() : sessionStorage.clear();
+	storage === "local" ? localStorage.clear() : sessionStorage.clear();
 };
-
