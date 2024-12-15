@@ -36,9 +36,9 @@ export default function Login() {
 	const [loading, setLoading] = useState(false);
 	const [isChecked, setIsChecked] = useState(false);
 
-	useEffect(() => {
-		!isAuthenticated() ? null : router.push("/dashboard");
-	});
+	// useEffect(() => {
+	// 	!isAuthenticated() ? null : router.push("/dashboard");
+	// });
 
 	const form = useForm<z.infer<typeof loginSchema>>({
 		resolver: zodResolver(loginSchema),

@@ -1,5 +1,6 @@
 import { ACTIVE } from "@/constants/status";
 import { supabase } from "./supabaseClient";
+import Cookies from 'js-cookie';
 
 type loginCredentials = {
 	email: string;
@@ -31,6 +32,8 @@ export const login = async ({ email, password }: loginCredentials) => {
 	const refreshToken = data.session.refresh_token;
 	const userId = data.user.id;
 	const accountData = await getAccount(userId);
+
+	setCookies('accessToken', accessToken);
 
 	return {
 		accessToken: accessToken,
@@ -153,3 +156,12 @@ export const storeSessionStorage = (data: any) => {
 export const clearStorage = (storage?: string) => {
 	storage === "local" ? localStorage.clear() : sessionStorage.clear();
 };
+
+export const setCookies = (key : string, value : string, expires: number = 7, secure: boolean = false, path: string = '/') => {
+	Cookies.set(key, value, { expires, secure, sameSite: 'Strict', path})
+	console.log('done setting cookies')
+}
+
+export const getCookies = (key: string) => {
+	Cookies.get(key)
+}
