@@ -18,20 +18,16 @@ import { WavyElement } from "@/components/elements/wavy";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { Button } from "antd";
-
-const formScema = z.object({
-	email: z.string().email("Invalid email address"),
-	password: z.string().min(6, "Password should be atleast 6 characters"),
-	first_name: z.string(),
-	last_name: z.string(),
-	contact_number: z.string().min(11, "Invalid phone number."),
-});
+import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { registerSchema } from "@/schema";
 
 export default function Register() {
+	const router = useRouter();
 	const [loading, setLoading] = useState(false);
 
-	const form = useForm<z.infer<typeof formScema>>({
-		resolver: zodResolver(formScema),
+	const form = useForm<z.infer<typeof registerSchema>>({
+		resolver: zodResolver(registerSchema),
 		defaultValues: {
 			email: "",
 			password: "",
@@ -41,33 +37,25 @@ export default function Register() {
 		},
 	});
 
-	const onSubmit = async (values: z.infer<typeof formScema>) => {
+	const onSubmit = async (values: z.infer<typeof registerSchema>) => {
 		setLoading(true);
 
 		try {
 			const response = await register(values);
-			toast.success('Registration successful!')
-			setLoading(false);
-			//TODO: redirect to login route
+			toast.success("Registration successful!");
+			form.reset();
+			router.push("/login");
 		} catch (error) {
-			toast.error('Something went wrong.')
+			toast.error("Something went wrong.");
 			console.log(error);
+		} finally {
 			setLoading(false);
 		}
 	};
 
 	return (
 		<section className="relative w-full h-screen flex items-center justify-center px-5 antialiased">
-			<ToastContainer
-				position="top-right"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={true}
-				closeOnClick
-				rtl={false}
-				pauseOnHover
-			/>
-			<div className="w-[40rem] h-[35rem] z-[99] rounded-xl bg-white shadow-2xl shadow-gray-800/40 border-2 border-gray-200 p-5">
+			<div className="w-[30rem] h-[40rem] z-[99] rounded-xl bg-white shadow-2xl shadow-gray-800/40 border-2 border-gray-200 p-5">
 				<div className="items-center justify-center text-center">
 					<h1>Logo here</h1>
 				</div>
@@ -78,15 +66,17 @@ export default function Register() {
 								control={form.control}
 								name="first_name"
 								render={({ field }) => (
-									<FormItem>
+									<FormItem className={cn(" pb-4")}>
 										<FormLabel>First Name</FormLabel>
 										<FormControl>
 											<Input
-												placeholder="First name"
+												placeholder="First Name"
 												{...field}
 											/>
 										</FormControl>
-										<FormMessage />
+										<FormMessage
+											className={cn("text-red-600")}
+										/>
 									</FormItem>
 								)}
 							></FormField>
@@ -94,7 +84,7 @@ export default function Register() {
 								control={form.control}
 								name="last_name"
 								render={({ field }) => (
-									<FormItem>
+									<FormItem className={cn(" pb-4")}>
 										<FormLabel>Last Name</FormLabel>
 										<FormControl>
 											<Input
@@ -102,7 +92,9 @@ export default function Register() {
 												{...field}
 											/>
 										</FormControl>
-										<FormMessage />
+										<FormMessage
+											className={cn("text-red-600")}
+										/>
 									</FormItem>
 								)}
 							></FormField>
@@ -110,15 +102,18 @@ export default function Register() {
 								control={form.control}
 								name="contact_number"
 								render={({ field }) => (
-									<FormItem>
+									<FormItem className={cn("pb-4")}>
 										<FormLabel>Contact Number</FormLabel>
 										<FormControl>
 											<Input
 												placeholder="Contact Number"
+												maxLength={11}
 												{...field}
 											/>
 										</FormControl>
-										<FormMessage />
+										<FormMessage
+											className={cn("text-red-600")}
+										/>
 									</FormItem>
 								)}
 							></FormField>
@@ -126,7 +121,7 @@ export default function Register() {
 								control={form.control}
 								name="email"
 								render={({ field }) => (
-									<FormItem>
+									<FormItem className={cn("pb-4")}>
 										<FormLabel>Email</FormLabel>
 										<FormControl>
 											<Input
@@ -134,7 +129,9 @@ export default function Register() {
 												{...field}
 											/>
 										</FormControl>
-										<FormMessage />
+										<FormMessage
+											className={cn("text-red-600")}
+										/>
 									</FormItem>
 								)}
 							></FormField>
@@ -142,7 +139,7 @@ export default function Register() {
 								control={form.control}
 								name="password"
 								render={({ field }) => (
-									<FormItem>
+									<FormItem className={cn("pb-4")}>
 										<FormLabel>Password</FormLabel>
 										<FormControl>
 											<Input
@@ -151,7 +148,9 @@ export default function Register() {
 												{...field}
 											/>
 										</FormControl>
-										<FormMessage />
+										<FormMessage
+											className={cn("text-red-600")}
+										/>
 									</FormItem>
 								)}
 							></FormField>
