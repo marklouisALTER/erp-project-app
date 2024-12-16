@@ -1,5 +1,6 @@
 import { ACTIVE } from "@/constants/status";
 import { supabase } from "./supabaseClient";
+import Cookies from 'js-cookie';
 
 type loginCredentials = {
 	email: string;
@@ -31,6 +32,8 @@ export const login = async ({ email, password }: loginCredentials) => {
 	const refreshToken = data.session.refresh_token;
 	const userId = data.user.id;
 	const accountData = await getAccount(userId);
+
+	setCookies('accessToken', accessToken);
 
 	return {
 		accessToken: accessToken,
@@ -108,9 +111,19 @@ export const getSession = async () => {
 
 	if (error) {
 		console.log("Error getting user session: ", error);
+		return null;
 	}
 
 	return data.session;
+};
+
+export const getToken = async () => {
+	const session = await getSession();
+
+	return {
+		accessToken: session?.access_token ?? null,
+		refreshToken: session?.refresh_token ?? null,
+	};
 };
 
 export const getAccount = async (userId: string) => {
@@ -129,14 +142,26 @@ export const getAccount = async (userId: string) => {
 };
 
 export const rememberMe = (data: any) => {
-	localStorage.setItem("account", JSON.parse(data))
+	localStorage.setItem("account", JSON.stringify(data.accountData));
+	localStorage.setItem("accessToken", JSON.stringify(data.accessToken));
+	localStorage.setItem("refreshToken", JSON.stringify(data.refreshToken));
 };
 
 export const storeSessionStorage = (data: any) => {
-	sessionStorage.setItem("account", JSON.stringify(data));
+	sessionStorage.setItem("account", JSON.stringify(data.accountData));
+	sessionStorage.setItem("accessToken", data.accessToken);
+	sessionStorage.setItem("refreshToken", data.refreshToken);
 };
 
 export const clearStorage = (storage?: string) => {
-	storage === 'local' ? localStorage.clear() : sessionStorage.clear();
+	storage === "local" ? localStorage.clear() : sessionStorage.clear();
 };
 
+export const setCookies = (key : string, value : string, expires: number = 7, secure: boolean = false, path: string = '/') => {
+	Cookies.set(key, value, { expires, secure, sameSite: 'Strict', path})
+	console.log('done setting cookies')
+}
+
+export const getCookies = (key: string) => {
+	Cookies.get(key)
+}
