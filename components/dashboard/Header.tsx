@@ -8,7 +8,7 @@ export default function Header() {
 
     return (
         <header className="bg-custom- fixed w-full lg:w-[calc(100%-265px)] lg:ml-[265px] z-20">
-            <div className="flex justify-between items-center h-16 px-4">
+            <div className="flex justify-end items-center h-16 px-4">
 
                 {/* Sidebar Toggle Button for Small Screens */}
                 <button
