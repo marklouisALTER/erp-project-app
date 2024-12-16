@@ -1,7 +1,15 @@
-import React from 'react'
+"use client";
 
-export default function page(){
-  return (
-    <section>Dashboard</section>
-  )
+import { isAuthenticated } from "@/lib/auth/getToken";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+
+export default function page() {
+	const router = useRouter();
+
+	useEffect(() => {
+		!isAuthenticated() ? router.push("/login") : null;
+	}, []);
+
+	return <section>Dashboard</section>;
 }

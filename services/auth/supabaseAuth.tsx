@@ -1,5 +1,6 @@
 import { ACTIVE } from "@/constants/status";
 import { supabase } from "./supabaseClient";
+import Cookies from 'js-cookie';
 
 type loginCredentials = {
 	email: string;
@@ -27,7 +28,18 @@ export const login = async ({ email, password }: loginCredentials) => {
 		throw error;
 	}
 
-	return data;
+	const accessToken = data.session.access_token;
+	const refreshToken = data.session.refresh_token;
+	const userId = data.user.id;
+	const accountData = await getAccount(userId);
+
+	setCookies('accessToken', accessToken);
+
+	return {
+		accessToken: accessToken,
+		refreshToken: refreshToken,
+		accountData: accountData,
+	};
 };
 
 export const register = async ({
@@ -53,9 +65,11 @@ export const register = async ({
 		first_name: first_name,
 		last_name: last_name,
 		status: ACTIVE,
-		user_type: 'admin',
+		user_type: "admin",
 		contact_number: contact_number,
 	};
+
+	console.log("inserted data", insertData);
 
 	const { data: insertValues, error: insertError } = await supabase
 		.from("account")
@@ -66,7 +80,7 @@ export const register = async ({
 		throw insertError;
 	}
 
-	console.log('success')
+	console.log("success");
 
 	return { insertData, data };
 };
@@ -97,7 +111,57 @@ export const getSession = async () => {
 
 	if (error) {
 		console.log("Error getting user session: ", error);
+		return null;
 	}
 
 	return data.session;
 };
+
+export const getToken = async () => {
+	const session = await getSession();
+
+	return {
+		accessToken: session?.access_token ?? null,
+		refreshToken: session?.refresh_token ?? null,
+	};
+};
+
+export const getAccount = async (userId: string) => {
+	const { data, error } = await supabase
+		.from("account")
+		.select("*")
+		.eq("user_id", userId);
+
+	if (error) {
+		console.log("Error fetching account data", error);
+	}
+
+	const accountData = data;
+
+	return data?.[0] ?? null;
+};
+
+export const rememberMe = (data: any) => {
+	localStorage.setItem("account", JSON.stringify(data.accountData));
+	localStorage.setItem("accessToken", JSON.stringify(data.accessToken));
+	localStorage.setItem("refreshToken", JSON.stringify(data.refreshToken));
+};
+
+export const storeSessionStorage = (data: any) => {
+	sessionStorage.setItem("account", JSON.stringify(data.accountData));
+	sessionStorage.setItem("accessToken", data.accessToken);
+	sessionStorage.setItem("refreshToken", data.refreshToken);
+};
+
+export const clearStorage = (storage?: string) => {
+	storage === "local" ? localStorage.clear() : sessionStorage.clear();
+};
+
+export const setCookies = (key : string, value : string, expires: number = 7, secure: boolean = false, path: string = '/') => {
+	Cookies.set(key, value, { expires, secure, sameSite: 'Strict', path})
+	console.log('done setting cookies')
+}
+
+export const getCookies = (key: string) => {
+	Cookies.get(key)
+}

@@ -1,29 +1,144 @@
 "use client";
-import { useTheme } from "@/hooks/useTheme";
-import { Checkbox } from "antd";
-import { useState } from "react";
 
-type submitType = {
-    username: string;
-    password: string;
-    remember: boolean;
-};
+import { WavyElement } from "@/components/elements/wavy";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormMessage,
+	FormLabel,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useTheme } from "@/hooks/useTheme";
+import { cn } from "@/lib/utils";
+import { loginSchema } from "@/schema";
+import {
+	getSession,
+	login,
+	rememberMe,
+	storeSessionStorage,
+} from "@/services/auth/supabaseAuth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Checkbox } from "antd";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { z } from "zod";
+import { Button } from "antd";
+import { isAuthenticated } from "@/lib/auth/getToken";
 
 export default function Login() {
+	const router = useRouter();
+	const { isDark } = useTheme();
 
-    const { isDark } = useTheme();
-   
-    return (
-        <section className="relative w-full h-screen flex items-center justify-center px-5">
-            <div className="w-[40rem] h-[30rem] z-[99] rounded-xl bg-white shadow-2xl shadow-gray-800/40 border-2 border-gray-200 px-5">
+	const [loading, setLoading] = useState(false);
+	const [isChecked, setIsChecked] = useState(false);
 
-                
+	// useEffect(() => {
+	// 	!isAuthenticated() ? null : router.push("/dashboard");
+	// });
 
-            </div>
+	const form = useForm<z.infer<typeof loginSchema>>({
+		resolver: zodResolver(loginSchema),
+		defaultValues: {
+			email: "",
+			password: "",
+		},
+	});
 
-            <svg xmlns="http://www.w3.org/2000/svg" className="absolute bottom-0" viewBox="0 0 1440 320">
-                <path fill="#f54714" fillOpacity="1" d="M0,224L24,224C48,224,96,224,144,229.3C192,235,240,245,288,224C336,203,384,149,432,133.3C480,117,528,139,576,138.7C624,139,672,117,720,122.7C768,128,816,160,864,149.3C912,139,960,85,1008,69.3C1056,53,1104,75,1152,69.3C1200,64,1248,32,1296,42.7C1344,53,1392,107,1416,133.3L1440,160L1440,320L1416,320C1392,320,1344,320,1296,320C1248,320,1200,320,1152,320C1104,320,1056,320,1008,320C960,320,912,320,864,320C816,320,768,320,720,320C672,320,624,320,576,320C528,320,480,320,432,320C384,320,336,320,288,320C240,320,192,320,144,320C96,320,48,320,24,320L0,320Z"></path>
-            </svg>
-        </section>
-    )
+	const handleLogin = async (values: z.infer<typeof loginSchema>) => {
+		setLoading(true);
+
+		try {
+			const response = await login(values);
+
+			if (!isChecked) {
+				storeSessionStorage(response);
+			} else {
+				rememberMe(response);
+			}
+
+			toast.success("Login Successs!");
+			router.push("/dashboard");
+		} catch (error) {
+			toast.error("Invalid credentials.");
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const handleCheck = (e) => {
+		setIsChecked(e.target.checked);
+	};
+
+	return (
+		<section className="relative w-full h-screen flex items-center justify-center px-5 antialiased">
+			<div className="w-[30rem] h-[18rem] z-[99] rounded-xl bg-white shadow-2xl shadow-gray-800/40 border-2 border-gray-200 p-5">
+				<div className="items-center justify-center text-center">
+					<h1>Logo here</h1>
+				</div>
+				<div className="p-4 justify-center items-center">
+					<Form {...form}>
+						<form onSubmit={form.handleSubmit(handleLogin)}>
+							<FormField
+								control={form.control}
+								name="email"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Email</FormLabel>
+										<FormControl>
+											<Input
+												placeholder="Email"
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage
+											className={cn("text-red-600")}
+										/>
+									</FormItem>
+								)}
+							></FormField>
+							<FormField
+								control={form.control}
+								name="password"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Password</FormLabel>
+										<FormControl>
+											<Input
+												placeholder="*********"
+												type="password"
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage
+											className={cn("text-red-600")}
+										/>
+									</FormItem>
+								)}
+							></FormField>
+							<Checkbox
+								className={cn("py-2")}
+								checked={isChecked}
+								onChange={handleCheck}
+							>
+								Remember me?
+							</Checkbox>
+							<Button
+								type="primary"
+								loading={loading}
+								htmlType="submit"
+								className="w-full"
+							>
+								Login
+							</Button>
+						</form>
+					</Form>
+				</div>
+			</div>
+			<WavyElement />
+		</section>
+	);
 }
