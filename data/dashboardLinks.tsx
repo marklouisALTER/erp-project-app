@@ -30,12 +30,12 @@ export const dashboardLinks: SidebarLink[] = [
             {
                 key: "products",
                 label: "Products",
-                path: "/dashboard/inventory/products",
+                path: "/inventory/products",
             },
             {
                 key: "categories",
                 label: "Categories",
-                path: "/dashboard/inventory/categories",
+                path: "/inventory/categories",
             }
         ],
     },

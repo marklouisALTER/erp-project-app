@@ -146,7 +146,7 @@ export default function page() {
 			</SelectContent>
 		  </Select>
 		  <Input placeholder="Search..." className="max-w-xs" />
-		  <Button>Filter</Button>
+		  <Button className="bg-custom-orange text-white">Filter</Button>
 		</div>
 
 		{/* Table */}

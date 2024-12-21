@@ -12,7 +12,7 @@ export default function Header() {
 
                 {/* Sidebar Toggle Button for Small Screens */}
                 <button
-                    className="block lg:hidden p-2 bg-custom-orange text-white rounded-md shadow-md"
+                    className="block lg:hidden p-2 text-custom-orange rounded-md shadow-md"
                     onClick={toggleSidebar}
                 >
                     {isOpen ? <RiCloseLine size={24} /> : <RiMenuLine size={24} />}
