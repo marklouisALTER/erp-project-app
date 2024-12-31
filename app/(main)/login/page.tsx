@@ -20,17 +20,15 @@ import {
 	storeSessionStorage,
 } from "@/services/auth/supabaseAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Checkbox } from "antd";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { z } from "zod";
-import { Button } from "antd";
 import { isAuthenticated } from "@/lib/auth/getToken";
 
 export default function Login() {
-	const router = useRouter();
+	// const router = useRouter();
 	const { isDark } = useTheme();
 
 	const [loading, setLoading] = useState(false);
@@ -61,16 +59,12 @@ export default function Login() {
 			}
 
 			toast.success("Login Successs!");
-			router.push("/dashboard");
+			// router.push("/dashboard");
 		} catch (error) {
 			toast.error("Invalid credentials.");
 		} finally {
 			setLoading(false);
 		}
-	};
-
-	const handleCheck = (e) => {
-		setIsChecked(e.target.checked);
 	};
 
 	return (
@@ -119,21 +113,6 @@ export default function Login() {
 									</FormItem>
 								)}
 							></FormField>
-							<Checkbox
-								className={cn("py-2")}
-								checked={isChecked}
-								onChange={handleCheck}
-							>
-								Remember me?
-							</Checkbox>
-							<Button
-								type="primary"
-								loading={loading}
-								htmlType="submit"
-								className="w-full"
-							>
-								Login
-							</Button>
 						</form>
 					</Form>
 				</div>

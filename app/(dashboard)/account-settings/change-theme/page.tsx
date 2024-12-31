@@ -5,7 +5,6 @@ import { Bar, BarChart, ResponsiveContainer } from "recharts"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Switch, ConfigProvider } from "antd"
 import { useThemeStore } from "@/store/useThemeStore"
 
 const data = [
@@ -24,13 +23,6 @@ export default function ThemeSwitcher() {
   const { isDarkMode, setIsDarkMode } = useThemeStore()
 
   return (
-    <ConfigProvider
-      theme={{
-        token: {
-          colorPrimary: "#f54714", // Set your active color here
-        },
-      }}
-    >
     <section className={`${isDarkMode ? 'bg-zinc-900': ''} p-5 h-screen`}>
         <h3 className={`${isDarkMode ? "text-white" : "text-zinc-800"} text-2xl font-semibold `}>Change Theme</h3>
         <div className="flex flex-col items-center md:flex-row md:items-start gap-8 p-8">
@@ -42,11 +34,6 @@ export default function ThemeSwitcher() {
               <Label htmlFor="dark-mode" className={isDarkMode ? "text-white" : "text-zinc-900"}>
                 Dark mode
               </Label>
-              <Switch
-                id="dark-mode"
-                checked={isDarkMode}
-                onChange={(checked) => setIsDarkMode(checked)}
-              />
             </div>
             <Input
               type="search"
@@ -76,6 +63,5 @@ export default function ThemeSwitcher() {
   
       </div>
     </section>
-    </ConfigProvider>
   )
 }
