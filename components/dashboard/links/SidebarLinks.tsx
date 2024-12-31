@@ -53,7 +53,7 @@ export function SidebarLinks({ item }: { item: SidebarLink }) {
             return (
               <li
                 key={subLink.key}
-                className={`flex items-center gap-2 text-sm transition-all ease-in-out rounded-md px-3 py-2 ${
+                className={`flex items-center gap-2 text-sm transition-all ease-in-out mt-2 rounded-md px-3 py-2 ${
                   isSubLinkActive
                     ? 'bg-custom-orange text-white' 
                     : 'text-custom-orange hover:text-white hover:bg-custom-orange'
