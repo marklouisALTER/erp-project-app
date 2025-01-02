@@ -36,6 +36,14 @@ export function AddProductButton() {
             <Input id="price" type="number" />
           </div>
           <div className="grid gap-2">
+            <Label htmlFor="base_price">Base Price</Label>
+            <Input id="base_price" type="number" />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="cost">Cost</Label>
+            <Input id="cost" type="number" />
+          </div>
+          <div className="grid gap-2">
             <Label htmlFor="stock">Stock</Label>
             <Input id="stock" type="number" />
           </div>

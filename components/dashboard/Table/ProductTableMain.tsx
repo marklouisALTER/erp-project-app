@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -8,9 +8,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { Edit2, Trash2 } from 'lucide-react'
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Edit2, Trash2 } from 'lucide-react';
 import {
   Pagination,
   PaginationContent,
@@ -18,15 +18,19 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination"
-import { useProductStore } from "@/store/useProductstore"
-
+} from "@/components/ui/pagination";
+import { useProductStore } from "@/store/useProductstore";
 
 export function ProductTableMain() {
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
   const { products } = useProductStore();
-  const itemsPerPage = 5
-  const totalPages = Math.ceil(products.length / itemsPerPage)
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+
+  const paginatedProducts = products.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div>
@@ -45,55 +49,47 @@ export function ProductTableMain() {
             </TableRow>
           </TableHeader>
           <TableBody>
-          {products && products.length > 0 ? (
-            products.map((product) => (
-              <TableRow key={product.id}>
-                <TableCell className="font-medium">{product.name}</TableCell>
-                <TableCell>${product.price.toFixed(2)}</TableCell>
-                <TableCell>${product.basePrice.toFixed(2)}</TableCell>
-                <TableCell>${product.margin.toFixed(2)}</TableCell>
-                <TableCell>${product.cost.toFixed(2)}</TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-2">
-                    <div className="text-sm">{product.status.current} pcs.</div>
-                    <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-[#f54714]"
-                        style={{
-                          width: `${(product.status.current / product.status.total) * 100}%`,
-                        }}
-                      />
+            {paginatedProducts.length > 0 ? (
+              paginatedProducts.map((product) => (
+                <TableRow key={product.id}>
+                  <TableCell className="font-medium">{product.name}</TableCell>
+                  <TableCell>${product.price.toFixed(2)}</TableCell>
+                  <TableCell>${product.basePrice.toFixed(2)}</TableCell>
+                  <TableCell>${product.margin.toFixed(2)}</TableCell>
+                  <TableCell>${product.cost.toFixed(2)}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <div className="text-sm">{product.status.current} pcs.</div>
+                      <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-[#f54714]"
+                          style={{
+                            width: `${(product.status.current / product.status.total) * 100}%`,
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </TableCell>
-                <TableCell>{product.lastUpdated}</TableCell>
-                <TableCell>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-blue-500"
-                    >
-                      <Edit2 className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-red-500"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
+                  </TableCell>
+                  <TableCell>{product.lastUpdated}</TableCell>
+                  <TableCell>
+                    <div className="flex gap-2">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-blue-500">
+                        <Edit2 className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-red-500">
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={8} className="text-center">
+                  No products found
                 </TableCell>
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={8} className="text-center">
-                No products found
-              </TableCell>
-            </TableRow>
-          )}
+            )}
           </TableBody>
         </Table>
       </div>
@@ -125,6 +121,5 @@ export function ProductTableMain() {
         </PaginationContent>
       </Pagination>
     </div>
-  )
+  );
 }
-
