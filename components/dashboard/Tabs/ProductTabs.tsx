@@ -1,23 +1,27 @@
-"use client"
+"use client";
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useProductStore } from "@/store/useProductstore";
+import { useState } from "react";
 
-type categoryType = {
-    id: string
-    label: string
-}[]
-
-const categories:categoryType = [
-    { id: 'branch-one', label: 'Main Branch' },
-    { id: 'branch-two', label: 'Quezon Branch' },
-    { id: 'branch-three', label: 'Malabon Branch' },
-    { id: 'branch-four', label: 'Makati Branch' },
-  ]
-  
+const categories = [
+  { id: "branch-one", label: "Main Branch" },
+  { id: "branch-two", label: "Quezon Branch" },
+  { id: "branch-three", label: "Malabon Branch" },
+  { id: "branch-four", label: "Makati Branch" },
+];
 
 export function ProductTabs() {
+  const { filterByBranch, currentBranch, setBranch } = useProductStore();
+
+  const handleTabChange = (tabId: string) => {
+    setBranch(tabId);
+    filterByBranch(tabId);
+    console.log(tabId);;
+  };
+
   return (
-    <Tabs defaultValue="branch-one" className="mb-6">
+    <Tabs value={currentBranch} onValueChange={handleTabChange} className="mb-6">
       <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent">
         {categories.map((category) => (
           <TabsTrigger
@@ -30,6 +34,5 @@ export function ProductTabs() {
         ))}
       </TabsList>
     </Tabs>
-  )
+  );
 }
-

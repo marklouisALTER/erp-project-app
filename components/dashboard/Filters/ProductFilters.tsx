@@ -12,7 +12,7 @@ import {
 import { useProductStore } from '@/store/useProductstore'
 
 export function SearchAndFilters() {
-  const { filteredProducts, sortProducts, filterByStockStatus } = useProductStore();
+  const { filteredProducts, currentBranch, sortProducts, filterByStockStatus } = useProductStore();
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = e.target.value.toLowerCase();
